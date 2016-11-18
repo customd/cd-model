@@ -1,0 +1,30 @@
+{
+  "name": "cd-model",
+  "authors": [
+    "Sam Sehnert <sam@customd.com>"
+  ],
+  "description": "Provides methods to build and render a collection of data objects from an API, handle pagination, sorting, and filtering.",
+  "main": "model.js",
+  "dependencies": {
+    "jquery": ">=1.9",
+	"array": "matthewmueller/array#0.4.3"
+  },
+  "keywords": [
+    "model",
+    "ajax",
+    "api",
+    "data",
+    "collection",
+    "sorting",
+    "pagination",
+    "filtering"
+  ],
+  "license": "MIT",
+  "homepage": "https://www.customd.com/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ]
+}
