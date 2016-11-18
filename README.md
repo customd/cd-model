@@ -1,6 +1,6 @@
 CD_Model.js
 ===========
-### By Sam Sehnert, [Custom D](https://www.customd.com/) 2016
+### By Josh Smith & Sam Sehnert, [Custom D](https://www.customd.com/) 2016
 
 Provides methods to build and manipulate a data collection from an API, including handling pagination, sorting, filtering, and searching.
 
