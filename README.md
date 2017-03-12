@@ -19,7 +19,10 @@ Define a data model for your API endpoint.
 
 /* jshint unused:false */
 
-var Users_Model_params = {};
+if( ! ('Users_Model_params' in window))
+{
+    var Users_Model_params = {};
+}
 
 /**
  * Users Model
