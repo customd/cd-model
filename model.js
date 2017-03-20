@@ -1,11 +1,13 @@
 /**
  * Implements useful methods applicable to DF_Model objects passed to the front end.
  *
- * @version 1.3.2
+ * @version 1.4.0
  *
  * @author Josh Smith <josh@customd.com>
  * @author Sam Sehnert <sam@customd.com>
+ * @author Craig Smith <craig.smith@customd.com>
  *
+ * @since 1.4.0 Allows the option to make a model abort simultaneous requests.
  * @since 1.3.2 Fixes another issue with multiple initialisations.
  * @since 1.3.1 Fixes an issue with multiple initialisations of multiple model collection instances.
  * @since 1.3.0 Added methods to support API pagination and sorting.
@@ -225,39 +227,49 @@ var CD_Model, CD_Result;
 		 * Private API request method
 		 *
 		 * @author Josh Smith <josh@customd.com>
+		 * @since  1.4.0 Added ability to discard simultaneous requests.
 		 * @since  1.0.0 Introduced.
 		 *
 		 * @param  {String} method GET|PUT|POST|DELETE
 		 * @param  {Object} data   Data to Put/Post
 		 * @return {Object}        Ajax Promise
 		 */
-		var _make_request = function(method, endpoint, data){
+		 var _make_request = function(method, endpoint, data){
 
-			// Make sure an API Endpoint has been defined
-			if( !this.settings.endpoint )
-			{
-				throw 'Error: The API Toolset has not been setup correctly.';
-			}
+             // Make sure an API Endpoint has been defined
+             if( ! this.settings.endpoint )
+             {
+                 throw 'Error: The API Toolset has not been setup correctly.';
+             }
 
-			// Build a request object
-			var request = {
-				'method' 	: method,
-				'url' 		: this.settings.endpoint.replace(/\/+$/, '') + '/' + endpoint,
-				'dataType'	: 'json',
-				'timeout' 	: 5000,
-				'headers' 	: {
-				},
-			};
+             // Build a request object
+             var request = {
+                 'method'     : method,
+                 'url'        : this.settings.endpoint.replace(/\/+$/, '') + '/' + endpoint,
+                 'dataType'   : 'json',
+                 'timeout'    : 5000,
+                 'headers'    : {},
+             };
 
-			if( method !== 'get' && data )
-			{
-				request.data = data;
-			}
+             if( method !== 'get' && data )
+             {
+                 request.data = data;
+             }
 
-			return $.ajax(request);
-		};
-
-
+             if (this._last_request !== false)
+			 {
+                 var lq = this._last_request;
+                 request.beforeSend = function (){
+	                 if (lq !== null && lq !== true)
+					 {
+	                     lq.abort();
+	                 }
+                 };
+                 this._last_request = $.ajax(request);
+                 return this._last_request;
+             }
+             return $.ajax(request);
+         };
 
 		/**
 		 * Return a function set used to communicate with the back end server.
