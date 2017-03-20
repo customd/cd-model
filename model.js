@@ -116,6 +116,7 @@ var CD_Model, CD_Result;
 		// Set the prototype and constructor properties
 		Model_Collection.prototype = Object.create(this.prototype);
 		Model_Collection.prototype.constructor = Model_Collection;
+		CD_Model.prototype._last_request = false;
 
 		/**
 		 * Model Collection Sugary Construct Function
