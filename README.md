@@ -19,7 +19,10 @@ Define a data model for your API endpoint.
 
 /* jshint unused:false */
 
-var Users_Model_params = {};
+if( ! ('Users_Model_params' in window))
+{
+    var Users_Model_params = {};
+}
 
 /**
  * Users Model
@@ -51,6 +54,62 @@ var Users_Result = CD_Result.extend({
 
 });
 ```
+
+
+### Usage
+
+An example of making a call to get a single specific record:
+
+```
+var get_params = {"id": 5};
+
+/**
+ * Check for newly added categories, and append to the document.
+ *
+ * @author Sam Sehnert <sam@teamdf.com>
+ *
+ * @since  1.0.0 Introduced
+ */
+model.on('add', $.ratelimit(function(item, index){
+
+	// Add the index for use in the template.
+	item.__index = index+1;
+
+	// Render the template.
+	var $rendered = $(template__list_item(item));
+
+	// Add the rendered template to the DOM.
+	$element.append($rendered);
+
+},10,50)); // Render 25 every 1ms
+
+/**
+ * Handle responses from the initial request to the data model.
+ *
+ * @author Sam Sehnert <sam@customd.com>
+ *
+ * @since  1.0.0 Introduced
+ */
+model.init(get_params).always(loaded).done(paginate).fail(function(xhr, response){
+
+	var $rendered;
+
+	if( response === 'timeout' )
+	{
+		$rendered = $(template__list_error({
+			message : 'The server doesn\'t seem to be replying. Please try again later.'
+		}));
+	}
+	else
+	{
+		$rendered = $(template__list_empty());
+	}
+
+	// Add the rendered template to the DOM.
+	$element.html($rendered);
+});
+```
+
 
 
 Contributing
