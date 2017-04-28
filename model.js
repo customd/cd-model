@@ -7,6 +7,7 @@
  * @author Sam Sehnert <sam@customd.com>
  * @author Craig Smith <craig.smith@customd.com>
  *
+ * @since 1.4.1 Fixed erronious '/' causing 301 redirects
  * @since 1.4.0 Allows the option to make a model abort simultaneous requests.
  * @since 1.3.2 Fixes another issue with multiple initialisations.
  * @since 1.3.1 Fixes an issue with multiple initialisations of multiple model collection instances.
@@ -33,7 +34,7 @@ var CD_Model, CD_Result;
 		params 		: {},
 		attribute	: 'data',
 		init		: false,
-		remote 		: false,
+		remote 		: false
 	};
 
 	/**
@@ -130,6 +131,8 @@ var CD_Model, CD_Result;
 		 * Allows deferred loading after some setup has taken place.
 		 *
 		 * @author Sam Sehnert <sam@teamdf.com>
+		 *
+		 * @param {Object} params Defaut Parameters
 		 *
 		 * @since  1.1.0 Introduced
 		 */
@@ -232,6 +235,7 @@ var CD_Model, CD_Result;
 		 * @since  1.0.0 Introduced.
 		 *
 		 * @param  {String} method GET|PUT|POST|DELETE
+		 * @param  {String} endpoint endpoint extra parameters
 		 * @param  {Object} data   Data to Put/Post
 		 * @return {Object}        Ajax Promise
 		 */
@@ -242,14 +246,19 @@ var CD_Model, CD_Result;
              {
                  throw 'Error: The API Toolset has not been setup correctly.';
              }
+			 var url = this.settings.endpoint.replace(/\/+$/, '');
+
+			 if(endpoint !== '' && endpoint.charAt(0) !== '?'){
+				 url  += "/";
+			 }
 
              // Build a request object
              var request = {
                  'method'     : method,
-                 'url'        : this.settings.endpoint.replace(/\/+$/, '') + '/' + endpoint,
+                 'url'        : url + endpoint,
                  'dataType'   : 'json',
                  'timeout'    : 5000,
-                 'headers'    : {},
+                 'headers'    : {}
              };
 
              if( method !== 'get' && data )
@@ -343,12 +352,12 @@ var CD_Model, CD_Result;
 			/**
 			 * [delete description]
 			 * @param  {[type]} data   [description]
-			 * @param  {[type]} endpoint [description]
+			 * @param  {[type]} params [description]
 			 * @return {[type]}        [description]
 			 */
 			delete : function(data, params){
 				return _make_request.apply(self, ['delete', params]);
-			},
+			}
 
 		};
 
@@ -389,8 +398,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.4.0 Introduced
 	 *
-	 * @param  string  param      The filed to add the filter for.
-	 * @param  string  value     The value to filter on. If empty, we'll remove filters for this field.
+	 * @param  {String}  param      The filed to add the filter for.
+	 * @param  {String}  value     The value to filter on. If empty, we'll remove filters for this field.
 	 *
 	 * @return void
 	 */
@@ -415,8 +424,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  string  field      The filed to add the filter for.
-	 * @param  string  filter     The value to filter on. If empty, we'll remove filters for this field.
+	 * @param  {String}  field      The filed to add the filter for.
+	 * @param  {String} filter     The value to filter on. If empty, we'll remove filters for this field.
 	 *
 	 * @return {Array} An array of the sorted set of objects for this collection.
 	 */
@@ -450,6 +459,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
+	 * @param {String} sort
+	 *
 	 * @return {Array} An array of the sorted set of objects for this collection.
 	 */
 	CD_Model.prototype.sort = function(sort) {
@@ -481,7 +492,7 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  string  search     The search value to send through.
+	 * @param  {String}  search     The search value to send through.
 	 *
 	 * @return {Array} An array of the sorted set of objects for this collection.
 	 */
@@ -514,7 +525,7 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.0.0  Introduced
 	 *
-	 * @param  int   count       The number of items to get
+	 * @param  {int}   count       The number of items to get
 	 *
 	 * @return {Array} An array of the next set of objects for this collection.
 	 */
@@ -585,7 +596,7 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0  Introduced
 	 *
-	 * @param  int   count       The number of items to get.
+	 * @param  {int}   count       The number of items to get.
 	 *
 	 * @return {Array} An array of the previous set of objects for this collection.
 	 */
@@ -626,8 +637,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  object  params     A set of parameters to add to the request.
-	 * @param  string  segments   A URL segment/prefix we'd add to the path.
+	 * @param  {object}  params     A set of parameters to add to the request.
+	 * @param  {string}  segments   A URL segment/prefix we'd add to the path.
 	 *
 	 * @return string The full URL that we'd make a request to for this model.
 	 */
@@ -679,7 +690,7 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  int  count      Use the given limit to get the correct URL. Optional.
+	 * @param  {int}  count      Use the given limit to get the correct URL. Optional.
 	 *
 	 * @return string The URL we'd use to get the 'next' data set.
 	 */
@@ -709,7 +720,7 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  int  count      Use the given limit to get the correct URL. Optional.
+	 * @param  {int}  count      Use the given limit to get the correct URL. Optional.
 	 *
 	 * @return string The URL we'd use to get the 'prev' data set.
 	 */
@@ -738,8 +749,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @since  1.3.0 Introduced
 	 *
-	 * @param  int  page      The page we want to be on.
-	 * @param  int  count     Use the given limit to get the correct URL. Optional.
+	 * @param  {int}  page      The page we want to be on.
+	 * @param  {int}  count     Use the given limit to get the correct URL. Optional.
 	 *
 	 * @return string The URL we'd use to get the 'next' data set.
 	 */
@@ -765,6 +776,8 @@ var CD_Model, CD_Result;
 	 *
 	 * @author 	Josh Smith <josh@customd.com>
 	 * @since 	1.0.0 Introduced
+	 *
+	 * @param {object} params
 	 *
 	 * @return {Object} API Request Promise
 	 */
@@ -849,7 +862,7 @@ var CD_Model, CD_Result;
 						// If the property exists on the object, and matches our where clause
 						// Note, we do a non–type comparison. As we can't guarantee the user knows what format
 						// the ID of an object might be in, due to JS being a loosly typed language (could be string, int etc.).
-						if( typeof self[prop][clause] !== 'undefined' && self[prop][clause] == where[clause] )
+						if( typeof self[prop][clause] !== 'undefined' && self[prop][clause] == where[clause] ) // jshint ignore:line
 						{
 							truth_table[clause] = true;
 						}
@@ -986,6 +999,7 @@ var CD_Model, CD_Result;
 	 * @author Josh Smith <josh@customd.com>
 	 * @since  1.0.0 Introduced
 	 *
+	 * @param {object} methods
 	 * @return {Function}
 	 */
 	CD_Result.extend = function(methods){
@@ -1059,7 +1073,7 @@ var CD_Model, CD_Result;
 			}
 
 			return JSON.stringify(obj);
-		},
+		}
 
 	};
 })(jQuery);
