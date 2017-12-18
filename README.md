@@ -56,6 +56,22 @@ var Users_Result = CD_Result.extend({
 ```
 
 
+### Settings
+
+The settings object allows you to define defaults.
+
+*   `endpoint`
+
+    Required - the full API url to the model resource.
+
+*   `params`
+
+    Optional - an object of the `prop=value` pairs ofthe `GET` parameters to add to the URL.
+
+*   `attribute` 
+    
+    Optional - defaults to `data`. The attribute in the response where you can find the model data.
+
 ### Usage
 
 An example of making a call to get a single specific record:
