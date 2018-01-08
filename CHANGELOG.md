@@ -3,6 +3,18 @@ Changelog
 
 ___Please___ __view this file on the master branch, on stable branches it's out of date.__
 
+##### v1.4.2
+
+- Added timeout as a configurable setting.
+
+##### v1.4.1
+
+- Fixed erroneous '/' causing 301 redirects
+
+##### v1.4.0
+
+- Allows the option to make a model abort simultaneous requests.
+
 ##### v1.3.2
 
 - Fixes another issue with multiple initialisations.

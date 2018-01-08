@@ -1,12 +1,13 @@
 /**
  * Implements useful methods applicable to DF_Model objects passed to the front end.
  *
- * @version 1.4.0
+ * @version 1.4.2
  *
  * @author Josh Smith <josh@customd.com>
  * @author Sam Sehnert <sam@customd.com>
  * @author Craig Smith <craig.smith@customd.com>
  *
+ * @since 1.4.2 Added timeout as a configurable setting.
  * @since 1.4.1 Fixed erronious '/' causing 301 redirects
  * @since 1.4.0 Allows the option to make a model abort simultaneous requests.
  * @since 1.3.2 Fixes another issue with multiple initialisations.
@@ -34,7 +35,8 @@ var CD_Model, CD_Result;
 		params 		: {},
 		attribute	: 'data',
 		init		: false,
-		remote 		: false
+		remote 		: false,
+		timeout		: 5000
 	};
 
 	/**
@@ -231,6 +233,7 @@ var CD_Model, CD_Result;
 		 * Private API request method
 		 *
 		 * @author Josh Smith <josh@customd.com>
+		 * @since  1.4.2 Added timeout as a configurable setting.
 		 * @since  1.4.0 Added ability to discard simultaneous requests.
 		 * @since  1.0.0 Introduced.
 		 *
@@ -257,7 +260,7 @@ var CD_Model, CD_Result;
                  'method'     : method,
                  'url'        : url + endpoint,
                  'dataType'   : 'json',
-                 'timeout'    : 5000,
+                 'timeout'    : this.settings.timeout || 5000,
                  'headers'    : {}
              };
 

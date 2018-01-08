@@ -63,8 +63,9 @@ The settings object allows you to define defaults.
 Property | Required | Description
 --|--|--
 `endpoint` | Yes | The full API url to the model resource.
-`params` | No | An object of the `prop=value` pairs ofthe `GET` parameters to add to the URL.
+`params` | No | An object of the `prop=value` pairs of the `GET` parameters to add to the URL.
 `attribute` | No | Defaults to `data`. The attribute in the response where you can find the model data.
+`timeout` | No | Defaults to `5000`. The timeout value for the GET operation.
 
 ### Usage
 
